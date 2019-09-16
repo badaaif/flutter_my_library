@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_library/widgets/filter_popup_menu.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/books.dart';
-import '../providers/book.dart';
-import './book_detail_screen.dart';
-import '../widgets/book_item.dart';
+import '../widgets/books_gridview.dart';
+import '../widgets/filter_popup_menu.dart';
+import '../models/filter_options.dart';
 
 class BooksListScreen extends StatefulWidget {
   static const route = '/books-list';
@@ -15,14 +16,16 @@ class BooksListScreen extends StatefulWidget {
 
 class _BooksListScreenState extends State<BooksListScreen> {
   final _searchController = TextEditingController();
-  String filter;
+  String _textFilter;
+  FilterOptions _selectedFilter;
 
   @override
   void initState() {
     super.initState();
+    _selectedFilter = FilterOptions.All;
     _searchController.addListener(() {
       setState(() {
-        filter = _searchController.text;
+        _textFilter = _searchController.text;
       });
     });
   }
@@ -33,33 +36,63 @@ class _BooksListScreenState extends State<BooksListScreen> {
     _searchController.dispose();
   }
 
-  ListView _getListView(Books data) {
+  
+
+  void _setFilter(FilterOptions filter) {
+    setState(() {
+      _selectedFilter = filter;
+    });
+  }
+
+  Widget _getGridView(Books data) {
     var books = data.myBooks;
-    if (filter != null && filter.isEmpty == false) {
-      books = books.where((item) {
-        if (item.title.toLowerCase().contains(filter.toLowerCase()) ||
-            item.author.toLowerCase().contains(filter.toLowerCase()) ||
-            item.publisher.toLowerCase().contains(filter.toLowerCase())) {
-          return true;
-        }
-        return false;
-      }).toList();
+    if (_textFilter != null && _textFilter.isEmpty == false) {
+      if (_selectedFilter == FilterOptions.Title) {
+        books = books.where((item) {
+          if (item.title.toLowerCase().contains(_textFilter.toLowerCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      } else if (_selectedFilter == FilterOptions.Author) {
+        books = books.where((item) {
+          if (item.author.toLowerCase().contains(_textFilter.toLowerCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      } else if (_selectedFilter == FilterOptions.Publisher) {
+        books = books.where((item) {
+          if (item.publisher
+              .toLowerCase()
+              .contains(_textFilter.toLowerCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      } else if (_selectedFilter == FilterOptions.LentTo) {
+        books = books.where((item) {
+          if (item.lendTo != null && item.lendTo.toLowerCase().contains(_textFilter.toLowerCase()) &&
+              item.isLent) {
+            return true;
+          }
+          return false;
+        }).toList();
+      } else {
+        books = books.where((item) {
+          if (item.title.toLowerCase().contains(_textFilter.toLowerCase()) ||
+              item.author.toLowerCase().contains(_textFilter.toLowerCase()) ||
+              item.publisher
+                  .toLowerCase()
+                  .contains(_textFilter.toLowerCase())) {
+            return true;
+          }
+          return false;
+        }).toList();
+      }
     }
-    return ListView.builder(
-      itemCount: books.length,
-      itemBuilder: (ctx, i) => Column(
-        children: <Widget>[
-          BookItem(
-            books[i].id,
-            books[i].title,
-            books[i].author,
-            books[i].isFavorite,
-            books[i].isLent,
-          ),
-          
-        ],
-      ),
-    );
+    //if(books == null) books = [];
+    return BooksGridView(books);
   }
 
   @override
@@ -67,20 +100,26 @@ class _BooksListScreenState extends State<BooksListScreen> {
     //final booksData = Provider.of<Books>(context).items;
     return Column(
       children: <Widget>[
-       TextField(
-            decoration: InputDecoration(
-              labelText: 'Search',
-              prefixIcon: Icon(Icons.search),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                  prefixIcon: Icon(Icons.search),
+                ),
+                controller: _searchController,
+              ),
             ),
-            controller: _searchController,
-          ),
-        
+            FilterPopUpMenu(_setFilter)
+          ],
+        ),
         Divider(
           height: 5,
         ),
         Expanded(
           child: Consumer<Books>(builder: (ctx, booksData, _) {
-            return _getListView(booksData);
+            return _getGridView(booksData);
           }),
         ),
       ],

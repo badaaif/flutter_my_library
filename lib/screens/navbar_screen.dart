@@ -8,6 +8,7 @@ import './wish_list_books_screen.dart';
 import './favorites_books_screen.dart';
 import '../providers/books.dart';
 
+
 class NavBarScreen extends StatefulWidget {
   @override
   _NavBarScreenState createState() => _NavBarScreenState();
@@ -20,6 +21,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
     LentBooksScreen(),
     WishListBooksScreen(),
   ];
+
 
   int _selectedPageIndex = 0;
 
@@ -46,7 +48,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
             onPressed: () {
               Navigator.of(context).pushNamed(AddBookScreen.route);
             },
-          )
+          ),
         ],
       ),
       body: Container(

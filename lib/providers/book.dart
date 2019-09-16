@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 import '../helpers/db_helper.dart';
@@ -13,6 +14,7 @@ class Book with ChangeNotifier {
   bool isLent;
   String lendTo;
   bool isWishList;
+  File image;
 
   Book({
     @required this.id,
@@ -25,6 +27,7 @@ class Book with ChangeNotifier {
     this.isLent = false,
     this.lendTo = '',
     this.isWishList,
+    this.image,
   });
 
  Future<void> toggleFavorite() async{

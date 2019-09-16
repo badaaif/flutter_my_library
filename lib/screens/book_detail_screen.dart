@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,6 +50,24 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
+  Widget _getImage(File image) {
+    final height = 200.0;
+    final boxFit = BoxFit.cover;
+    return image == null
+        ? Image.asset(
+            'assets/images/book-cover-placeholder.png',
+            height: height,
+            //width: double.infinity,
+            fit: boxFit,
+          )
+        : Image.file(
+            image,
+            height: height,
+            //width: double.infinity,
+            fit: boxFit,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bookId = ModalRoute.of(context).settings.arguments;
@@ -56,19 +75,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Details'),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(
-        //       Icons.delete,
-        //       color: Colors.red,
-        //     ),
-        //     onPressed: () async {
-        //       Provider.of<Books>(context, listen: false)
-        //           .deleteBook(bookData.id);
-        //       Navigator.of(context).pop();
-        //     },
-        //   )
-        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -79,6 +85,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Hero(
+                  tag: bookData.id,
+                  child: _getImage(bookData.image),
+                ),
+                Divider(),
                 NameValueRow('Title:', bookData.title),
                 Divider(),
                 NameValueRow('Author:', bookData.author),
@@ -101,6 +112,18 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            if (!bookData.isWishList)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: FloatingActionButton(
+                  heroTag: null,
+                  onPressed: () {
+                    bookData.toggleWishList();
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(Icons.shopping_basket),
+                ),
+              ),
             if (!bookData.isLent)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -129,16 +152,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       bookData.toggleFavorite();
-      //     });
-      //   },
-      //   child: bookData.isFavorite
-      //       ? Icon(Icons.favorite)
-      //       : Icon(Icons.favorite_border),
-      // ),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -44,6 +46,7 @@ class Books with ChangeNotifier {
     String isbn,
     String remarks,
     bool isWishList,
+    File image,
   ) async {
     final newBook = Book(
       id: Uuid().v1(),
@@ -53,6 +56,7 @@ class Books with ChangeNotifier {
       isbn: isbn,
       remarks: remarks,
       isWishList: isWishList,
+      image: image,
     );
     _items.add(newBook);
     notifyListeners();
@@ -63,7 +67,8 @@ class Books with ChangeNotifier {
       'publisher': newBook.publisher,
       'isbn': newBook.isbn,
       'remarks': newBook.remarks,
-      'wish_list' : newBook.isWishList,
+      'wish_list': newBook.isWishList,
+      'image': newBook.image == null ? '' : newBook.image.path,
     });
   }
 
@@ -81,7 +86,6 @@ class Books with ChangeNotifier {
             isFavorite: item['favorite'] == null
                 ? false
                 : (item['favorite'] == 1 ? true : false),
-
             isLent: item['lent'] == null
                 ? false
                 : (item['lent'] == 1 ? true : false),
@@ -89,6 +93,7 @@ class Books with ChangeNotifier {
             isWishList: item['wish_list'] == null
                 ? false
                 : (item['wish_list'] == 1 ? true : false),
+            image: item['image'].toString().isEmpty ? null : File(item['image']),
           ),
         )
         .toList();

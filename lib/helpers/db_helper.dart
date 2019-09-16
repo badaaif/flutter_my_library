@@ -10,7 +10,7 @@ class DBHelper {
     return sql.openDatabase(path.join(dbPath, 'books.db'),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER)');
+          'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER, image TEXT)');
     }, version: 1);
   }
 
