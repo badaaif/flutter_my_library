@@ -7,8 +7,9 @@ import 'package:path_provider/path_provider.dart' as syspath;
 
 class ImageInput extends StatefulWidget {
   final Function onSelectImage;
+  final File oldImage;
 
-  ImageInput(this.onSelectImage);
+  ImageInput(this.onSelectImage, this.oldImage);
 
   @override
   _ImageInputState createState() => _ImageInputState();
@@ -16,6 +17,14 @@ class ImageInput extends StatefulWidget {
 
 class _ImageInputState extends State<ImageInput> {
   File _storedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.oldImage != null) {
+      _storedImage = widget.oldImage;
+    }
+  }
 
   Future<void> _takePicture(ImageSource source) async {
     final imageFile = await ImagePicker.pickImage(

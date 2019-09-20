@@ -17,12 +17,14 @@ class BookItem extends StatelessWidget {
   BookItem(this.id, this.title, this.author, this.isFavorite, this.isLent,
       this.image);
 
+  static const _imagePlaceholder = 'assets/images/book-cover-placeholder.png';
+
   Widget get _getImage {
     final height = double.infinity;
     final boxFit = BoxFit.cover;
     return image == null
         ? Image.asset(
-            'assets/images/book-cover-placeholder.png',
+            _imagePlaceholder,
             height: height,
             width: double.infinity,
             fit: boxFit,
@@ -40,7 +42,7 @@ class BookItem extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text('Are you sure?'),
-        content: Text('Do you want to delete the book'),
+        content: Text('Do you want to delete the book?'),
         actions: <Widget>[
           FlatButton(
             child: Text('No'),
@@ -72,7 +74,7 @@ class BookItem extends StatelessWidget {
       onLongPress: () => _showDeleteDialog(context),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(10),
         ),
         elevation: 4,
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -82,7 +84,7 @@ class BookItem extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                     child: Hero(
                       tag: id,
                       child: _getImage,
@@ -94,14 +96,14 @@ class BookItem extends StatelessWidget {
                     bottom: 0,
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
                       ),
                       child: Container(
                         color: Colors.black54,
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 20,
+                          vertical: 10,
+                          horizontal: 10,
                         ),
                         child: Text(
                           title,
@@ -114,7 +116,37 @@ class BookItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Positioned.fill(
+                    right: 5,
+                    top: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        if (isFavorite) 
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: constraints.maxWidth * 0.1,
+                              );
+                            },
+                          ),
+                        if (isLent)
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return Icon(
+                                Icons.contacts,
+                                color: Theme.of(context).accentColor,
+                                size: constraints.maxWidth * 0.1,
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

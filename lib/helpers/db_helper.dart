@@ -3,7 +3,7 @@ import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart' as path;
 
 class DBHelper {
-  static const _userBookTable = 'user_books';
+  static const userBookTable = 'user_books';
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
@@ -31,11 +31,15 @@ class DBHelper {
   static Future<void> _update(String id, Map<String, dynamic> values) async {
     final db = await DBHelper.database();
     db.update(
-      _userBookTable,
+      userBookTable,
       values,
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  static Future<void> updateBook(String id, Map<String, Object> data) async {
+    _update(id, data);
   }
 
   static Future<void> updateFavorite(String id, bool isFavorite) async {
@@ -50,9 +54,8 @@ class DBHelper {
     _update(id, {'wish_list': isWishList ? 1 : 0});
   }
 
-
   static Future<void> deleteBook(String id) async {
     final db = await DBHelper.database();
-    db.delete(_userBookTable, where: 'id = ?', whereArgs: [id]);
+    db.delete(userBookTable, where: 'id = ?', whereArgs: [id]);
   }
 }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/books.dart';
 import '../widgets/name_value_row.dart';
 import '../providers/book.dart';
+import '../screens/add_book_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
   static const route = '/book-detail';
@@ -75,33 +76,50 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Details'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                AddBookScreen.route,
+                arguments: bookId,
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Hero(
-                  tag: bookData.id,
-                  child: _getImage(bookData.image),
-                ),
-                Divider(),
-                NameValueRow('Title:', bookData.title),
-                Divider(),
-                NameValueRow('Author:', bookData.author),
-                Divider(),
-                NameValueRow('Publisher:', bookData.publisher),
-                Divider(),
-                NameValueRow('ISBN:', bookData.isbn),
-                Divider(),
-                NameValueRow('Remarks:', bookData.remarks),
-                Divider(),
-                if (bookData.isLent) NameValueRow('Lend To:', bookData.lendTo),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    child: Hero(
+                      tag: bookData.id,
+                      child: _getImage(bookData.image),
+                    ),
+                  ),
+                  Divider(),
+                  NameValueRow('Title:', bookData.title),
+                  Divider(),
+                  NameValueRow('Author:', bookData.author),
+                  Divider(),
+                  NameValueRow('Publisher:', bookData.publisher),
+                  Divider(),
+                  NameValueRow('ISBN:', bookData.isbn),
+                  Divider(),
+                  NameValueRow('Remarks:', bookData.remarks),
+                  Divider(),
+                  if (bookData.isLent)
+                    NameValueRow('Lend To:', bookData.lendTo),
+                ],
+              ),
             ),
           ),
         ),

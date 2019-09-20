@@ -72,8 +72,43 @@ class Books with ChangeNotifier {
     });
   }
 
+  Future<void> updateBook(String bookId, Book book) async {
+    final bookIndex = _items.indexWhere((b) => b.id == bookId);
+    var updatedBook = Book(
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      publisher: book.publisher,
+      isbn: book.isbn,
+      remarks: book.remarks,
+      isWishList: book.isWishList,
+      image: book.image,
+      isFavorite: _items[bookIndex].isFavorite,
+      isLent: _items[bookIndex].isLent,
+      lendTo: _items[bookIndex].lendTo,
+    );
+    _items[bookIndex] = updatedBook;
+    notifyListeners();
+    DBHelper.updateBook(
+      bookId,
+      {
+        'id': updatedBook.id,
+        'title': updatedBook.title,
+        'author': updatedBook.author,
+        'publisher': updatedBook.publisher,
+        'isbn': updatedBook.isbn,
+        'remarks': updatedBook.remarks,
+        'wish_list': updatedBook.isWishList,
+        'image': updatedBook.image == null ? '' : updatedBook.image.path,
+        'favorite': updatedBook.isFavorite,
+        'lent': updatedBook.isLent,
+        'lend_to': updatedBook.lendTo,
+      },
+    );
+  }
+
   Future<void> fetchBooks() async {
-    final booksList = await DBHelper.getData('user_books');
+    final booksList = await DBHelper.getData(DBHelper.userBookTable);
     _items = booksList
         .map(
           (item) => Book(
@@ -93,7 +128,8 @@ class Books with ChangeNotifier {
             isWishList: item['wish_list'] == null
                 ? false
                 : (item['wish_list'] == 1 ? true : false),
-            image: item['image'].toString().isEmpty ? null : File(item['image']),
+            image:
+                item['image'].toString().isEmpty ? null : File(item['image']),
           ),
         )
         .toList();

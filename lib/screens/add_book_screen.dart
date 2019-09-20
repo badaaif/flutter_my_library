@@ -27,6 +27,49 @@ class _AddBookScreenState extends State<AddBookScreen> {
     image: null,
   );
 
+  var _initialValues = {
+    'id': '',
+    'title': '',
+    'author': '',
+    'publisher': '',
+    'isbn': '',
+    'remarks': '',
+    'isWishList': false,
+    'image': null,
+  };
+
+  var _isInit = true;
+  var _isEdit = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isInit) {
+      final bookId = ModalRoute.of(context).settings.arguments as String;
+      if (bookId != null) {
+        _book = Provider.of<Books>(context, listen: false).findById(bookId);
+        _initialValues = {
+          'id': _book.id,
+          'title': _book.title,
+          'author': _book.author,
+          'publisher': _book.publisher,
+          'isbn': _book.isbn,
+          'remarks': _book.remarks,
+          'isWishList': _book.isWishList,
+          'image': _book.image,
+        };
+
+        _isEdit = true;
+      }
+    }
+    _isInit = false;
+  }
+
   void _selectImage(File pickedImage) {
     _book.image = pickedImage;
   }
@@ -37,24 +80,30 @@ class _AddBookScreenState extends State<AddBookScreen> {
       return;
     }
     _form.currentState.save();
-    await Provider.of<Books>(context, listen: false).insertBook(
-      _book.title,
-      _book.author,
-      _book.publisher,
-      _book.isbn,
-      _book.remarks,
-      _book.isWishList,
-      _book.image,
-    );
+    if (_isEdit) {
+      await Provider.of<Books>(context, listen: false)
+          .updateBook(_book.id, _book);
+    } else {
+      await Provider.of<Books>(context, listen: false).insertBook(
+        _book.title,
+        _book.author,
+        _book.publisher,
+        _book.isbn,
+        _book.remarks,
+        _book.isWishList,
+        _book.image,
+      );
+    }
 
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final appBarTitle = (_isEdit) ? 'Update Book' : 'Add New Book';
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Book'),
+        title: Text(appBarTitle),
       ),
       body: Column(
         children: <Widget>[
@@ -67,6 +116,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   child: ListView(
                     children: <Widget>[
                       TextFormField(
+                        initialValue: _initialValues['title'],
                         decoration: InputDecoration(labelText: 'Title'),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -88,6 +138,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                         },
                       ),
                       TextFormField(
+                        initialValue: _initialValues['author'],
                         decoration: InputDecoration(labelText: 'Author'),
                         onSaved: (value) {
                           _book = Book(
@@ -103,6 +154,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                         },
                       ),
                       TextFormField(
+                        initialValue: _initialValues['publisher'],
                         decoration: InputDecoration(labelText: 'Publisher'),
                         onSaved: (value) {
                           _book = Book(
@@ -118,6 +170,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                         },
                       ),
                       TextFormField(
+                        initialValue: _initialValues['isbn'],
                         decoration: InputDecoration(labelText: 'ISBN'),
                         onSaved: (value) {
                           _book = Book(
@@ -133,6 +186,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                         },
                       ),
                       TextFormField(
+                        initialValue: _initialValues['remarks'],
                         decoration: InputDecoration(labelText: 'Remarks'),
                         maxLines: 3,
                         keyboardType: TextInputType.multiline,
@@ -168,7 +222,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                         },
                         controlAffinity: ListTileControlAffinity.leading,
                       ),
-                      ImageInput(_selectImage),
+                      ImageInput(_selectImage, (_isEdit) ? _book.image : null),
                     ],
                   ),
                 ),
@@ -182,7 +236,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                 Icons.add,
               ),
               label: Text(
-                'Add',
+                _isEdit ? 'Update' : 'Add',
                 textAlign: TextAlign.center,
               ),
               color: Theme.of(context).accentColor,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helpers/csv_helper.dart';
 import './books_list_screen.dart';
 import './lent_books_screen.dart';
 import './add_book_screen.dart';
 import './wish_list_books_screen.dart';
 import './favorites_books_screen.dart';
 import '../providers/books.dart';
-
+import '../providers/shared_vars.dart';
 
 class NavBarScreen extends StatefulWidget {
   @override
@@ -22,13 +24,13 @@ class _NavBarScreenState extends State<NavBarScreen> {
     WishListBooksScreen(),
   ];
 
-
   int _selectedPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
     Provider.of<Books>(context, listen: false).fetchBooks();
+    Provider.of<SharedVars>(context, listen: false).initGridSize();
   }
 
   void _selectPage(int index) {
@@ -43,6 +45,18 @@ class _NavBarScreenState extends State<NavBarScreen> {
       appBar: AppBar(
         title: Text('Books'),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.file_download),
+            onPressed: ()  {
+               CSVHelper.exportBooks();
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.view_module),
+            onPressed: () {
+              Provider.of<SharedVars>(context, listen: false).toggleGridSize();
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
