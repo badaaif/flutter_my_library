@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedVars with ChangeNotifier {
-  int _gridSize = 2;
+  int _gridType = 1;
   
-  int get gridSize {
-    return _gridSize;
+  int get gridType {
+    return _gridType;
   }
 
-  Future<void> initGridSize() async {
-    _gridSize = await getGridSize();
+  Future<void> initGridType() async {
+    _gridType = await getGridType();
     notifyListeners();
   }
 
-  Future<void> toggleGridSize() async {
+  Future<void> toggleGridType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final gridSize = (prefs.getInt('gridSize') ?? 2) == 2 ? 3 : 2;
-    prefs.setInt('gridSize', gridSize) ;
-    _gridSize = gridSize;
+    final gridSize = (prefs.getInt('gridType') ?? 1) == 1 ? 2 : 1;
+    prefs.setInt('gridType', gridSize) ;
+    _gridType = gridSize;
     notifyListeners();
   }
 
 
 
-  Future<int> getGridSize() async {
+  Future<int> getGridType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return (prefs.getInt('gridSize') ?? 2);
+    return (prefs.getInt('gridType') ?? 1);
   }
 }

@@ -95,7 +95,8 @@ class _AddBookScreenState extends State<AddBookScreen> {
       );
     }
 
-    Navigator.of(context).pop();
+    Navigator.of(context)
+        .pop(_isEdit ? 'Updated Successfully' : 'New book has been added');
   }
 
   @override
@@ -109,121 +110,124 @@ class _AddBookScreenState extends State<AddBookScreen> {
         children: <Widget>[
           Container(
             child: Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Form(
-                  key: _form,
-                  child: ListView(
-                    children: <Widget>[
-                      TextFormField(
-                        initialValue: _initialValues['title'],
-                        decoration: InputDecoration(labelText: 'Title'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter title';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _book = Book(
-                            id: _book.id,
-                            title: value,
-                            author: _book.author,
-                            publisher: _book.publisher,
-                            isbn: _book.isbn,
-                            remarks: _book.remarks,
-                            isWishList: _book.isWishList,
-                            image: _book.image,
-                          );
-                        },
-                      ),
-                      TextFormField(
-                        initialValue: _initialValues['author'],
-                        decoration: InputDecoration(labelText: 'Author'),
-                        onSaved: (value) {
-                          _book = Book(
-                            id: _book.id,
-                            title: _book.title,
-                            author: value,
-                            publisher: _book.publisher,
-                            isbn: _book.isbn,
-                            remarks: _book.remarks,
-                            isWishList: _book.isWishList,
-                            image: _book.image,
-                          );
-                        },
-                      ),
-                      TextFormField(
-                        initialValue: _initialValues['publisher'],
-                        decoration: InputDecoration(labelText: 'Publisher'),
-                        onSaved: (value) {
-                          _book = Book(
-                            id: _book.id,
-                            title: _book.title,
-                            author: _book.author,
-                            publisher: value,
-                            isbn: _book.isbn,
-                            remarks: _book.remarks,
-                            isWishList: _book.isWishList,
-                            image: _book.image,
-                          );
-                        },
-                      ),
-                      TextFormField(
-                        initialValue: _initialValues['isbn'],
-                        decoration: InputDecoration(labelText: 'ISBN'),
-                        onSaved: (value) {
-                          _book = Book(
-                            id: _book.id,
-                            title: _book.title,
-                            author: _book.author,
-                            publisher: _book.publisher,
-                            isbn: value,
-                            remarks: _book.remarks,
-                            isWishList: _book.isWishList,
-                            image: _book.image,
-                          );
-                        },
-                      ),
-                      TextFormField(
-                        initialValue: _initialValues['remarks'],
-                        decoration: InputDecoration(labelText: 'Remarks'),
-                        maxLines: 3,
-                        keyboardType: TextInputType.multiline,
-                        onSaved: (value) {
-                          _book = Book(
-                            id: _book.id,
-                            title: _book.title,
-                            author: _book.author,
-                            publisher: _book.publisher,
-                            isbn: _book.isbn,
-                            remarks: value,
-                            isWishList: _book.isWishList,
-                            image: _book.image,
-                          );
-                        },
-                      ),
-                      CheckboxListTile(
-                        title: Text("Wish List"),
-                        value: _book.isWishList,
-                        onChanged: (value) {
-                          setState(() {
+              child: Card(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Form(
+                    key: _form,
+                    child: ListView(
+                      children: <Widget>[
+                        TextFormField(
+                          initialValue: _initialValues['title'],
+                          decoration: InputDecoration(labelText: 'Title'),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter title';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _book = Book(
+                              id: _book.id,
+                              title: value,
+                              author: _book.author,
+                              publisher: _book.publisher,
+                              isbn: _book.isbn,
+                              remarks: _book.remarks,
+                              isWishList: _book.isWishList,
+                              image: _book.image,
+                            );
+                          },
+                        ),
+                        TextFormField(
+                          initialValue: _initialValues['author'],
+                          decoration: InputDecoration(labelText: 'Author'),
+                          onSaved: (value) {
+                            _book = Book(
+                              id: _book.id,
+                              title: _book.title,
+                              author: value,
+                              publisher: _book.publisher,
+                              isbn: _book.isbn,
+                              remarks: _book.remarks,
+                              isWishList: _book.isWishList,
+                              image: _book.image,
+                            );
+                          },
+                        ),
+                        TextFormField(
+                          initialValue: _initialValues['publisher'],
+                          decoration: InputDecoration(labelText: 'Publisher'),
+                          onSaved: (value) {
+                            _book = Book(
+                              id: _book.id,
+                              title: _book.title,
+                              author: _book.author,
+                              publisher: value,
+                              isbn: _book.isbn,
+                              remarks: _book.remarks,
+                              isWishList: _book.isWishList,
+                              image: _book.image,
+                            );
+                          },
+                        ),
+                        TextFormField(
+                          initialValue: _initialValues['isbn'],
+                          decoration: InputDecoration(labelText: 'ISBN'),
+                          onSaved: (value) {
+                            _book = Book(
+                              id: _book.id,
+                              title: _book.title,
+                              author: _book.author,
+                              publisher: _book.publisher,
+                              isbn: value,
+                              remarks: _book.remarks,
+                              isWishList: _book.isWishList,
+                              image: _book.image,
+                            );
+                          },
+                        ),
+                        TextFormField(
+                          initialValue: _initialValues['remarks'],
+                          decoration: InputDecoration(labelText: 'Remarks'),
+                          maxLines: 3,
+                          keyboardType: TextInputType.multiline,
+                          onSaved: (value) {
                             _book = Book(
                               id: _book.id,
                               title: _book.title,
                               author: _book.author,
                               publisher: _book.publisher,
                               isbn: _book.isbn,
-                              remarks: _book.remarks,
-                              isWishList: value,
+                              remarks: value,
+                              isWishList: _book.isWishList,
                               image: _book.image,
                             );
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,
-                      ),
-                      ImageInput(_selectImage, (_isEdit) ? _book.image : null),
-                    ],
+                          },
+                        ),
+                        CheckboxListTile(
+                          title: Text("Wish List"),
+                          value: _book.isWishList,
+                          onChanged: (value) {
+                            setState(() {
+                              _book = Book(
+                                id: _book.id,
+                                title: _book.title,
+                                author: _book.author,
+                                publisher: _book.publisher,
+                                isbn: _book.isbn,
+                                remarks: _book.remarks,
+                                isWishList: value,
+                                image: _book.image,
+                              );
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        ImageInput(
+                            _selectImage, (_isEdit) ? _book.image : null),
+                      ],
+                    ),
                   ),
                 ),
               ),

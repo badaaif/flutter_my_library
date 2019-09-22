@@ -9,7 +9,7 @@ import '../providers/book.dart';
 import '../helpers/db_helper.dart';
 
 class CSVHelper {
-  static Future<void> exportBooks() async {
+  static Future<int> exportBooks() async {
     final booksList = await DBHelper.getData(DBHelper.userBookTable);
     var rows = List<List<dynamic>>();
     var items = booksList
@@ -53,20 +53,7 @@ class CSVHelper {
     }
 
     _saveCSV(rows);
-    //store file in documents folder
-
-    // String dir =
-    //     (await getExternalStorageDirectory()).absolute.path + "/documents";
-    // var file = "$dir";
-    // //print(LOGTAG + " FILE " + file);
-    // File f = new File(file + "filename.csv");
-
-    // // convert rows to String and write as csv file
-
-    // String csv = const ListToCsvConverter().convert(rows);
-    // f.writeAsString(csv);
-
-    //_writeCSV(rows);
+    return 1;
   }
 
   static Future<void> _saveCSV(List<List<dynamic>> rows) async {
@@ -77,13 +64,10 @@ class CSVHelper {
           Permission.WriteExternalStorage);
       if (status == PermissionStatus.authorized) {
         await _writeCSV(rows);
-        //return;
       }
     } else {
       await _writeCSV(rows);
-      //return res != null;
     }
-    //return false;
   }
 
   static Future<String> get _localPath async {
@@ -100,7 +84,6 @@ class CSVHelper {
     final file = await _localFile;
     // Write the file.
     final csv = const ListToCsvConverter().convert(rows);
-    print(csv);
     file.writeAsString(csv);
   }
 }

@@ -3,7 +3,7 @@ import 'package:my_library/widgets/filter_popup_menu.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/books.dart';
-import '../widgets/books_gridview.dart';
+import '../widgets/books_view.dart';
 import '../widgets/filter_popup_menu.dart';
 import '../models/filter_options.dart';
 
@@ -92,7 +92,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
       }
     }
     //if(books == null) books = [];
-    return BooksGridView(books);
+    return BooksView(books);
   }
 
   @override

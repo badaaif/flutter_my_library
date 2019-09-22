@@ -30,7 +30,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
   void initState() {
     super.initState();
     Provider.of<Books>(context, listen: false).fetchBooks();
-    Provider.of<SharedVars>(context, listen: false).initGridSize();
+    Provider.of<SharedVars>(context, listen: false).initGridType();
   }
 
   void _selectPage(int index) {
@@ -45,22 +45,37 @@ class _NavBarScreenState extends State<NavBarScreen> {
       appBar: AppBar(
         title: Text('Books'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.file_download),
-            onPressed: ()  {
-               CSVHelper.exportBooks();
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.file_download),
+              onPressed: () async {
+                final result = await CSVHelper.exportBooks();
+                var message = 'Something went wrong...';
+                if (result == 1) {
+                  message = 'Books data exported successfully';
+                }
+                Scaffold.of(context).hideCurrentSnackBar();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(message),
+                  duration: Duration(seconds: 3),
+                ));
+              },
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.view_module),
-            onPressed: () {
-              Provider.of<SharedVars>(context, listen: false).toggleGridSize();
-            },
-          ),
+          Consumer<SharedVars>(builder: (ctx, sharedVars, child) {
+            return IconButton(
+              icon: Icon(
+                  sharedVars.gridType == 2 ? Icons.view_module : Icons.list),
+              onPressed: () {
+                Provider.of<SharedVars>(context, listen: false)
+                    .toggleGridType();
+              },
+            );
+          }),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddBookScreen.route);
+                Navigator.of(context).pushNamed(AddBookScreen.route);
             },
           ),
         ],

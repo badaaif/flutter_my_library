@@ -163,7 +163,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   });
                 },
                 child: bookData.isFavorite
-                    ? Icon(Icons.favorite)
+                    ? Icon(Icons.favorite, color: Colors.red,)
                     : Icon(Icons.favorite_border),
               ),
             ),

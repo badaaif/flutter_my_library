@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import '../providers/books.dart';
 import '../screens/book_detail_screen.dart';
 
-class BookItem extends StatelessWidget {
+class BookItemList extends StatelessWidget {
   final String id;
   final String title;
   final String author;
   final bool isFavorite;
   final bool isLent;
 
-  BookItem(
+  BookItemList(
     this.id,
     this.title,
     this.author,
@@ -31,6 +31,7 @@ class BookItem extends StatelessWidget {
         ),
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 20),
+        margin: EdgeInsets.symmetric(vertical: 5,),
       ),
       direction: DismissDirection.endToStart,
       confirmDismiss: (direction) {
@@ -58,6 +59,13 @@ class BookItem extends StatelessWidget {
       },
       onDismissed: (direction) {
         Provider.of<Books>(context, listen: false).deleteBook(id);
+        Scaffold.of(context).hideCurrentSnackBar();
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('Book has been deleted.'),
+          duration: Duration(
+            seconds: 3,
+          ),
+        ));
       },
       child: Card(
         elevation: 5,

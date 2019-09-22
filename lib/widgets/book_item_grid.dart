@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/books.dart';
 import '../screens/book_detail_screen.dart';
 
-class BookItem extends StatelessWidget {
+class BookItemGrid extends StatelessWidget {
   final String id;
   final String title;
   final String author;
@@ -14,7 +14,7 @@ class BookItem extends StatelessWidget {
   final bool isLent;
   final File image;
 
-  BookItem(this.id, this.title, this.author, this.isFavorite, this.isLent,
+  BookItemGrid(this.id, this.title, this.author, this.isFavorite, this.isLent,
       this.image);
 
   static const _imagePlaceholder = 'assets/images/book-cover-placeholder.png';
@@ -54,6 +54,13 @@ class BookItem extends StatelessWidget {
             child: Text('Yes'),
             onPressed: () {
               Provider.of<Books>(context, listen: false).deleteBook(id);
+              Scaffold.of(context).hideCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('Book has been deleted.'),
+                duration: Duration(
+                  seconds: 3,
+                ),
+              ));
               Navigator.of(ctx).pop(true);
             },
           ),
@@ -124,7 +131,7 @@ class BookItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        if (isFavorite) 
+                        if (isFavorite)
                           LayoutBuilder(
                             builder: (context, constraints) {
                               return Icon(
