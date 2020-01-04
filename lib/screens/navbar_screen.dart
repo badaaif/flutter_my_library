@@ -47,7 +47,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
         actions: <Widget>[
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.file_download),
+              icon: Icon(Icons.save),
               onPressed: () async {
                 final result = await CSVHelper.exportBooks();
                 var message = 'Something went wrong...';
@@ -59,6 +59,15 @@ class _NavBarScreenState extends State<NavBarScreen> {
                   content: Text(message),
                   duration: Duration(seconds: 3),
                 ));
+              },
+            ),
+          ),
+           Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.folder),
+              onPressed: () async {
+                await CSVHelper.openFile();
+                Provider.of<Books>(context, listen: false).fetchBooks();
               },
             ),
           ),

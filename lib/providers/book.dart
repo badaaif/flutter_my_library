@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 
 import '../helpers/db_helper.dart';
@@ -10,6 +12,7 @@ class Book with ChangeNotifier {
   final String publisher;
   final String isbn;
   final String remarks;
+  final String category;
   bool isFavorite;
   bool isLent;
   String lendTo;
@@ -23,6 +26,7 @@ class Book with ChangeNotifier {
     this.publisher,
     this.isbn,
     this.remarks,
+    this.category,
     this.isFavorite = false,
     this.isLent = false,
     this.lendTo = '',
@@ -30,23 +34,27 @@ class Book with ChangeNotifier {
     this.image,
   });
 
- Future<void> toggleFavorite() async{
-   isFavorite = !isFavorite;
-   notifyListeners();
-   DBHelper.updateFavorite(id, isFavorite);
- }
+  static List<String> get bookCategories {
+    return ['A', 'B', 'C'];
+  }
 
- void setLentStatus(bool isLent,String lendTo) {
-   this.isLent = isLent;
-   this.lendTo = lendTo;
-   notifyListeners();
-   DBHelper.updateLent(id, isLent, lendTo);
- }
+  Future<void> toggleFavorite() async {
+    isFavorite = !isFavorite;
+    notifyListeners();
+    DBHelper.updateFavorite(id, isFavorite);
+  }
 
- void toggleWishList() {
-   isWishList = !isWishList;
-   notifyListeners();
-   DBHelper.updateWishList(id, isWishList);
- }
-  
+  void setLentStatus(bool isLent, String lendTo) {
+    this.isLent = isLent;
+    this.lendTo = lendTo;
+    notifyListeners();
+    DBHelper.updateLent(id, isLent, lendTo);
+  }
+
+  void toggleWishList() {
+    isWishList = !isWishList;
+    notifyListeners();
+    DBHelper.updateWishList(id, isWishList);
+  }
+
 }

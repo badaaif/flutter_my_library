@@ -23,7 +23,7 @@ class NameValueRow extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Text(
-            value,
+            value == null ? '' : value,
             style: TextStyle(
               fontSize: 16,
             ),

@@ -23,6 +23,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     publisher: '',
     isbn: '',
     remarks: '',
+    category: null,
     isWishList: false,
     image: null,
   );
@@ -34,6 +35,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     'publisher': '',
     'isbn': '',
     'remarks': '',
+    'category': null,
     'isWishList': false,
     'image': null,
   };
@@ -60,6 +62,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
           'publisher': _book.publisher,
           'isbn': _book.isbn,
           'remarks': _book.remarks,
+          'category': _book.category,
           'isWishList': _book.isWishList,
           'image': _book.image,
         };
@@ -90,6 +93,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
         _book.publisher,
         _book.isbn,
         _book.remarks,
+        _book.category,
         _book.isWishList,
         _book.image,
       );
@@ -134,6 +138,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                               publisher: _book.publisher,
                               isbn: _book.isbn,
                               remarks: _book.remarks,
+                              category: _book.category,
                               isWishList: _book.isWishList,
                               image: _book.image,
                             );
@@ -150,6 +155,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                               publisher: _book.publisher,
                               isbn: _book.isbn,
                               remarks: _book.remarks,
+                              category: _book.category,
                               isWishList: _book.isWishList,
                               image: _book.image,
                             );
@@ -166,6 +172,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                               publisher: value,
                               isbn: _book.isbn,
                               remarks: _book.remarks,
+                              category: _book.category,
                               isWishList: _book.isWishList,
                               image: _book.image,
                             );
@@ -182,6 +189,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                               publisher: _book.publisher,
                               isbn: value,
                               remarks: _book.remarks,
+                              category: _book.category,
                               isWishList: _book.isWishList,
                               image: _book.image,
                             );
@@ -200,11 +208,38 @@ class _AddBookScreenState extends State<AddBookScreen> {
                               publisher: _book.publisher,
                               isbn: _book.isbn,
                               remarks: value,
+                              category: _book.category,
                               isWishList: _book.isWishList,
                               image: _book.image,
                             );
                           },
                         ),
+                        // DropdownButton<String>(
+                        //   isExpanded: true,
+                        //   value: _book.category ,
+                        //   hint: Text('Select Category'),
+                        //   items: Book.bookCategories.map((value) {
+                        //     return DropdownMenuItem(
+                        //       value: value,
+                        //       child: Text(value),
+                        //     );
+                        //   }).toList(),
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       _book = Book(
+                        //         id: _book.id,
+                        //         title: _book.title,
+                        //         author: _book.author,
+                        //         publisher: _book.publisher,
+                        //         isbn: _book.isbn,
+                        //         remarks: _book.remarks,
+                        //         category: value,
+                        //         isWishList: _book.isWishList,
+                        //         image: _book.image,
+                        //       );
+                        //     });
+                        //   },
+                        // ),
                         CheckboxListTile(
                           title: Text("Wish List"),
                           value: _book.isWishList,
@@ -217,6 +252,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                                 publisher: _book.publisher,
                                 isbn: _book.isbn,
                                 remarks: _book.remarks,
+                                category: _book.category,
                                 isWishList: value,
                                 image: _book.image,
                               );

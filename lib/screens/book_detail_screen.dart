@@ -116,6 +116,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   Divider(),
                   NameValueRow('Remarks:', bookData.remarks),
                   Divider(),
+                  //NameValueRow('Category:', bookData.category),
+                  Divider(),
                   if (bookData.isLent)
                     NameValueRow('Lend To:', bookData.lendTo),
                 ],

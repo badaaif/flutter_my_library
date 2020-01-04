@@ -7,11 +7,19 @@ class DBHelper {
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
-    return sql.openDatabase(path.join(dbPath, 'books.db'),
-        onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER, image TEXT)');
-    }, version: 1);
+    return sql.openDatabase(
+      path.join(dbPath, 'books.db'),
+      onCreate: (db, version) {
+        return db.execute(
+            'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT,category TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER, image TEXT, image_data TEXT)');
+      },
+      version: 3,
+      onUpgrade: (db, oldVersion, newVersion) {
+        if (oldVersion < newVersion) {
+           db.execute("ALTER TABLE "+ userBookTable +" ADD COLUMN image_data TEXT");
+        }
+      },
+    );
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {

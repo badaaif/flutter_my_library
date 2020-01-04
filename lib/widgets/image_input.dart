@@ -30,6 +30,7 @@ class _ImageInputState extends State<ImageInput> {
     final imageFile = await ImagePicker.pickImage(
       source: source,
       maxHeight: 600,
+      imageQuality: 50,
     );
     if (imageFile == null) {
       return null;

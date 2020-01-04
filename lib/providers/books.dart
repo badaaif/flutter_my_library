@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -11,6 +13,18 @@ class Books with ChangeNotifier {
 
   List<Book> get items {
     return [..._items];
+  }
+
+  static File stringToImage(String base64) {
+    Uint8List decoded = base64Decode(base64);
+    return File.fromRawPath(decoded);
+  }
+
+  static String imageToString(File image) {
+    List<int> imageBytes = image.readAsBytesSync();
+    print(imageBytes);
+    String base64Image = base64Encode(imageBytes);
+    return base64Image;
   }
 
   List<Book> get myBooks {
@@ -45,6 +59,7 @@ class Books with ChangeNotifier {
     String publisher,
     String isbn,
     String remarks,
+    String category,
     bool isWishList,
     File image,
   ) async {
@@ -55,6 +70,7 @@ class Books with ChangeNotifier {
       publisher: publisher,
       isbn: isbn,
       remarks: remarks,
+      category: category,
       isWishList: isWishList,
       image: image,
     );
@@ -67,8 +83,9 @@ class Books with ChangeNotifier {
       'publisher': newBook.publisher,
       'isbn': newBook.isbn,
       'remarks': newBook.remarks,
+      'category': newBook.category,
       'wish_list': newBook.isWishList,
-      'image': newBook.image == null ? '' : newBook.image.path,
+      'image': newBook.image == null ? '' : newBook.image.path, //imageToString(newBook.image),
     });
   }
 
@@ -81,6 +98,7 @@ class Books with ChangeNotifier {
       publisher: book.publisher,
       isbn: book.isbn,
       remarks: book.remarks,
+      category: book.category,
       isWishList: book.isWishList,
       image: book.image,
       isFavorite: _items[bookIndex].isFavorite,
@@ -98,8 +116,11 @@ class Books with ChangeNotifier {
         'publisher': updatedBook.publisher,
         'isbn': updatedBook.isbn,
         'remarks': updatedBook.remarks,
+        'category': updatedBook.category,
         'wish_list': updatedBook.isWishList,
-        'image': updatedBook.image == null ? '' : updatedBook.image.path,
+        'image': updatedBook.image == null
+            ? ''
+            : updatedBook.image.path, //imageToString(updatedBook.image),
         'favorite': updatedBook.isFavorite,
         'lent': updatedBook.isLent,
         'lend_to': updatedBook.lendTo,
@@ -118,6 +139,7 @@ class Books with ChangeNotifier {
             publisher: item['publisher'],
             isbn: item['isbn'],
             remarks: item['remarks'],
+            category: item['category'],
             isFavorite: item['favorite'] == null
                 ? false
                 : (item['favorite'] == 1 ? true : false),
@@ -128,8 +150,9 @@ class Books with ChangeNotifier {
             isWishList: item['wish_list'] == null
                 ? false
                 : (item['wish_list'] == 1 ? true : false),
-            image:
-                item['image'].toString().isEmpty ? null : File(item['image']),
+            image: item['image'].toString().isEmpty
+                ? null
+                : File(item['image']), //stringToImage(item['image']),
           ),
         )
         .toList();
