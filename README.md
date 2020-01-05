@@ -1,16 +1,30 @@
 # my_library
 
-A new Flutter project.
+A simple app for books management.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This app created for learning purpose.
+There are some missing or incompleted features.
+This app has not been tested on iOS devices, so please make sure to add the required permissions for some plugins used in this project.
 
-A few resources to get you started if this is your first Flutter project:
+### Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Add / edit / delete book.
+- Search 
+- Favourites & wish list books.
+- Import / Export books
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Plugins used
+- sqflite
+- path
+- uuid
+- provider
+- path_provider
+- image_picker
+- shared_preferences
+- csv
+- simple_permissions
+- esys_flutter_share
+- file_picker
+

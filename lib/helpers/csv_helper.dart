@@ -38,9 +38,8 @@ class CSVHelper {
             isWishList: item['wish_list'] == null
                 ? false
                 : (item['wish_list'] == 1 ? true : false),
-            image: item['image'].toString().isEmpty
-                ? null
-                : File(item['image']), //Books.stringToImage(item['image']), //
+            image:
+                item['image'].toString().isEmpty ? null : File(item['image']),
           ),
         )
         .toList();
@@ -58,7 +57,6 @@ class CSVHelper {
       row.add(items[i].lendTo);
       row.add(items[i].isWishList);
       if (items[i].image != null) {
-        //row.add(Books.imageToString(items[i].image));
         row.add(items[i].image.path);
         row.add(Books.imageToString(items[i].image));
       } else {
@@ -102,14 +100,13 @@ class CSVHelper {
     final csv = const ListToCsvConverter().convert(rows);
     await file.writeAsString(csv);
     Uint8List uIntBytes = file.readAsBytesSync();
-    final ByteData bytes = ByteData.view(
-        uIntBytes.buffer); //await rootBundle.load('assets/image1.png');
+    final ByteData bytes = ByteData.view(uIntBytes.buffer);
     await Share.file(
         'Books', 'Books.csv', bytes.buffer.asUint8List(), 'text/csv',
         text: 'This is a copy of my book library');
   }
-
-  static Future<void> openFile() async {
+  
+  static Future<void> importBooks() async {
     //Open File
     String filePath = await FilePicker.getFilePath();
     final input = new File(filePath).openRead();
@@ -121,28 +118,27 @@ class CSVHelper {
     //Loop through CSV
     for (var i = 0; i < fields.length; i++) {
       var row = fields[i];
-        File image;
-        if (row[10].toString().isNotEmpty) {
-          final appDir = await syspath.getApplicationDocumentsDirectory();
-          final fileName = path.basename(row[10]);
-          image = new File('${appDir.path}/$fileName');
-          Uint8List bytes = base64Decode(row[11]);
-          await image.writeAsBytes(bytes);
-        }
-        DBHelper.insert('user_books', {
-          'id': row[0],
-          'title': row[1],
-          'author': row[2],
-          'publisher': row[3],
-          'isbn': row[4],
-          'remarks': row[5],
-          'favorite': row[6],
-          'lent': row[7],
-          'lend_to': row[8],
-          'wish_list': row[9],
-          'image': row[10],
-        });
-      //}
+      File image;
+      if (row[10].toString().isNotEmpty) {
+        final appDir = await syspath.getApplicationDocumentsDirectory();
+        final fileName = path.basename(row[10]);
+        image = new File('${appDir.path}/$fileName');
+        Uint8List bytes = base64Decode(row[11]);
+        await image.writeAsBytes(bytes);
+      }
+      DBHelper.insert('user_books', {
+        'id': row[0],
+        'title': row[1],
+        'author': row[2],
+        'publisher': row[3],
+        'isbn': row[4],
+        'remarks': row[5],
+        'favorite': row[6],
+        'lent': row[7],
+        'lend_to': row[8],
+        'wish_list': row[9],
+        'image': row[10],
+      });
     }
   }
 }

@@ -11,12 +11,11 @@ class DBHelper {
       path.join(dbPath, 'books.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT,category TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER, image TEXT, image_data TEXT)');
+            'CREATE TABLE user_books(id TEXT PRIMARY KEY, title TEXT, author TEXT, publisher TEXT, isbn TEXT, remarks TEXT,category TEXT, favorite INTEGER, lent INTEGER, lend_to TEXT, wish_list INTEGER, image TEXT)');
       },
-      version: 3,
+      version: 1,
       onUpgrade: (db, oldVersion, newVersion) {
         if (oldVersion < newVersion) {
-           db.execute("ALTER TABLE "+ userBookTable +" ADD COLUMN image_data TEXT");
         }
       },
     );

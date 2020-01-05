@@ -91,7 +91,6 @@ class _BooksListScreenState extends State<BooksListScreen> {
         }).toList();
       }
     }
-    //if(books == null) books = [];
     return BooksView(books);
   }
 

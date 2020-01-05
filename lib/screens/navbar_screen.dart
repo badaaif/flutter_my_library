@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/csv_helper.dart';
 import './books_list_screen.dart';
@@ -66,7 +65,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
             builder: (context) => IconButton(
               icon: Icon(Icons.folder),
               onPressed: () async {
-                await CSVHelper.openFile();
+                await CSVHelper.importBooks();
                 Provider.of<Books>(context, listen: false).fetchBooks();
               },
             ),
