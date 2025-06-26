@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
-import 'package:simple_permissions/simple_permissions.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart' as syspath;
 
@@ -71,15 +69,8 @@ class CSVHelper {
   }
 
   static Future<void> _saveCSV(List<List<dynamic>> rows) async {
-    bool checkResult = await SimplePermissions.checkPermission(
-        Permission.WriteExternalStorage);
-    if (!checkResult) {
-      var status = await SimplePermissions.requestPermission(
-          Permission.WriteExternalStorage);
-      if (status == PermissionStatus.authorized) {
-        await _writeCSV(rows);
-      }
-    } else {
+    final status = await Permission.storage.request();
+    if (status.isGranted) {
       await _writeCSV(rows);
     }
   }
@@ -99,11 +90,10 @@ class CSVHelper {
     // Write the file.
     final csv = const ListToCsvConverter().convert(rows);
     await file.writeAsString(csv);
-    Uint8List uIntBytes = file.readAsBytesSync();
-    final ByteData bytes = ByteData.view(uIntBytes.buffer);
-    await Share.file(
-        'Books', 'Books.csv', bytes.buffer.asUint8List(), 'text/csv',
-        text: 'This is a copy of my book library');
+    await Share.shareXFiles(
+      [XFile(file.path, mimeType: 'text/csv')],
+      text: 'This is a copy of my book library',
+    );
   }
   
   static Future<void> importBooks() async {
